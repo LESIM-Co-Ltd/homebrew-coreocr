@@ -5,16 +5,22 @@
 class Coreocr < Formula
   desc "macOS CLI tool and Swift library for performing OCR using Vision"
   homepage "https://github.com/LESIM-Co-Ltd/CoreOCR"
-  url "https://github.com/LESIM-Co-Ltd/CoreOCR/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "37812c685a2433165b72462ee866c2ac41eaa3e3874a7ebca9b2b864d811a48b"
+  url "https://github.com/LESIM-Co-Ltd/CoreOCR/archive/refs/tags/v0.3.0.tar.gz"
+  sha256 "f3c0a99e85f0e62693c59b68ce290e11b2e991d0650a7997d0bc85f3420b3b37"
   license "MIT"
 
   depends_on :macos => :catalina # macOS 10.15
   depends_on :xcode => :build # Requires Xcode command line tools for swift build
 
   def install
+    # Build both the library and the executable
     system "swift", "build", "-c", "release", "--disable-sandbox"
+
+    # Install the executable
     bin.install ".build/release/CoreOCRCLI" => "coreocr"
+
+    # Install the dynamic library
+    lib.install ".build/release/libCoreOCRLib.dylib"
   end
 
   test do
